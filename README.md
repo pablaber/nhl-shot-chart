@@ -2,4 +2,4 @@
 A python program to display shot chart data.
 
 ## Data
-Game data to be found from http://live.nhl.com/GameData/{SEASON}/{GAME}/PlayByPlay.json. For example: http://live.nhl.com/GameData/20152016/2015020001/PlayByPlay.json
+Game data to be found from http://live.nhl.com/GameData/{SEASON}/{GAME_ID}/PlayByPlay.json. For example: http://live.nhl.com/GameData/20152016/2015020001/PlayByPlay.json. Game IDs can be gotten from http://live.nhl.com/GameData/SeasonSchedule-{SEASON}.json. For example: http://live.nhl.com/GameData/SeasonSchedule-20152016.json.
