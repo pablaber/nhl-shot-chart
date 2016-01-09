@@ -1,4 +1,5 @@
 from Tkinter import *
+import urllib, json
 
 tk = Tk()
 tk.title("NHL Shot Chart")
@@ -137,6 +138,38 @@ def create_rink(canvas):
 
     canvas.pack()
 
+# Returns the PlayByPlay.json file for the game given by the season and game_id
+def get_pbp_json(season, game_id):
+    url = "http://live.nhl.com/GameData/" + str(season) + "/" + str(game_id) + "/PlayByPlay.json"
+    response = urllib.urlopen(url)
+    data = json.loads(response.read())
+    return data
+
+# Adds play to the shot chart
+# Types of plays: Goal, Shot, Hit, Penalty
+def add_to_chart(play, canvas):
+    x = play["xcoord"]
+    y = play["ycoord"]
+    coords = WIDTH/2+x*SCALE-4, HEIGHT/2+y*SCALE-4, WIDTH/2+x*SCALE+4, HEIGHT/2+y*SCALE+4
+    color = LIGHT_BLUE
+    if play["type"] == "Shot":
+        color = "red"
+    elif play["type"] == "Hit":
+        color = "yellow"
+    elif play["type"] == "Goal":
+        color = "green"
+    elif play["type"] == "Penalty":
+        color = "blue"
+    canvas.create_oval(coords, outline="", fill=color)
+    canvas.pack()
+
 canvas = Canvas(tk, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
 create_rink(canvas)
+
+data = get_pbp_json(20152016, 2015020590)
+plays = data["data"]["game"]["plays"]["play"]
+
+for i in range(0, len(plays)):
+    add_to_chart(plays[i], canvas)
+
 tk.mainloop()
