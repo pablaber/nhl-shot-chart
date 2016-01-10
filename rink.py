@@ -187,7 +187,12 @@ def add_to_chart(play, options={}):
     if options == {}:
         add_event(play, color, label, x, y)
     else:
-        if play["teamid"] == options["teamid"]:
+        adding = True
+        for option in options:
+            if str(play[option]) != str(options[option]) and options[option] != -1:
+                adding = False
+                break
+        if adding:  
             add_event(play, color, label, x, y)
 
 def clear_events():
@@ -195,32 +200,47 @@ def clear_events():
     while len(events) > 0:
         canvas.delete(events.pop())
 
+def determine_periods(obj):
+    """Returns the number of periods in the json 'play' array obj"""
+    return obj[len(obj)-1]["period"]
+    
+
 tk = Tk()
-tk.geometry(str(WIDTH)+"x"+str(HEIGHT + 100))
+tk.geometry(str(WIDTH)+"x"+str(HEIGHT+150))
 tk.title("NHL Shot Chart")
 
-canvas = Canvas(tk, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
+top_frame = Frame(tk)
+top_frame.grid(row=0)
+bottom_frame = Frame(tk)
+bottom_frame.grid(row=2)
+description_frame = Frame(tk)
+description_frame.grid(row=1)
+
+
+canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
 create_rink()
 
 data = get_pbp_json(20152016, 2015020590)
+# data = get_pbp_json(20152016, 2015020613)
 plays = data["data"]["game"]["plays"]["play"]
 home_team = data["data"]["game"]["hometeamname"]
 away_team = data["data"]["game"]["awayteamname"]
 
-
-
 for i in range(0, len(plays)):
     add_to_chart(plays[i])
 
-variable = StringVar(tk)
+variable = StringVar(bottom_frame)
 variable.set("Both") # default value
-description = StringVar(tk)
+description = StringVar(bottom_frame)
 description.set("None selected")
 
 # Updates the shot chart
 def update_chart():
     """Updates the shot chart based off of what team is selected."""
     selected_team = variable.get()
+    selected_period = period_variable.get()
+    if selected_period == "All":
+        selected_period = -1
     selected_id = -1
     if selected_team == home_team:
         selected_id = data["data"]["game"]["hometeamid"]
@@ -228,20 +248,36 @@ def update_chart():
         selected_id = data["data"]["game"]["awayteamid"]
     clear_events()
     for i in range(0, len(plays)):
-        add_to_chart(plays[i], {"teamid":selected_id})
+        add_to_chart(plays[i], {"teamid":selected_id, "period":selected_period})
     
 
 # Team Select
-team_menu = OptionMenu(tk, variable, "Both", home_team, away_team)
-team_menu.pack()
+team_label = Label(bottom_frame, text="Select Team")
+team_label.grid(row=0, sticky=E)
+team_menu = OptionMenu(bottom_frame, variable, "Both", home_team, away_team)
+team_menu.config(width=20)
+team_menu.grid(row=0, column=1, columnspan=2, sticky=E+W)
+
+# Period Select
+period_label = Label(bottom_frame, text="Select Period")
+period_label.grid(row=1, sticky=E)
+period_variable = StringVar(bottom_frame)
+period_variable.set("All")
+periods = determine_periods(plays)
+period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3")
+if periods == 4:
+    period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3", "OT")
+elif periods == 5:
+    period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3", "OT", "SO")
+period_menu.grid(row=1, column = 1, columnspan=2, sticky=E+W)
 
 # Buttons
 # - Update
-update = Button(tk, text="Update", command=update_chart)
-update.pack()
+update = Button(bottom_frame, text="Update", command=update_chart)
+update.grid(row=3, column=1)
 
 # Description
-desc = Label(tk, textvariable=description)
-desc.pack()
+desc = Label(description_frame, textvariable=description)
+desc.grid(row=0, sticky=E+W+N+S)
 
 tk.mainloop()
