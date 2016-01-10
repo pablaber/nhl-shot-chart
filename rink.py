@@ -148,28 +148,45 @@ def get_pbp_json(season, game_id):
     data = json.loads(response.read())
     return data
 
+def click_event(event):
+    desc_tuple = canvas.gettags(event.widget.find_closest(event.x, event.y)[0])
+    desc = [x for x in desc_tuple if x != "current"]
+    desc = ' '.join(map(str,desc))
+    description.set(desc)
+
 # Adds play to the shot chart
 # Types of plays: Goal, Shot, Hit, Penalty
 def add_to_chart(play, options={}):
     x = play["xcoord"]
     y = play["ycoord"]
-    coords = WIDTH/2+x*SCALE-4, HEIGHT/2+y*SCALE-4, WIDTH/2+x*SCALE+4, HEIGHT/2+y*SCALE+4
+    coords = WIDTH/2+x*SCALE-6, HEIGHT/2+y*SCALE-6, WIDTH/2+x*SCALE+6, HEIGHT/2+y*SCALE+6
     color = LIGHT_BLUE
+    label = ""
+    style = ("Arial", 10, "bold")
     if play["type"] == "Shot":
         color = "red"
+        label = "S"
     elif play["type"] == "Hit":
         color = "yellow"
+        label = "H"
     elif play["type"] == "Goal":
         color = "green"
+        label = "G"
     elif play["type"] == "Penalty":
         color = "blue"
+        label = "P"
     if options == {}:
-        event = canvas.create_oval(coords, outline="", fill=color)
+        event = canvas.create_oval(coords, outline="black", fill=color)
+        events.append(event)
+        event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style)
         events.append(event)
         canvas.pack()
     else:
         if play["teamid"] == options["teamid"]:
-            event = canvas.create_oval(coords, outline="", fill=color)
+            event = canvas.create_oval(coords, outline="black", fill=color)
+            events.append(event)
+            event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=play["desc"])
+            canvas.tag_bind(event, "<ButtonPress-1>", click_event)
             events.append(event)
             canvas.pack()
 
@@ -191,7 +208,9 @@ for i in range(0, len(plays)):
     add_to_chart(plays[i])
 
 variable = StringVar(tk)
-variable.set("Select Team") # default value
+variable.set("Both") # default value
+description = StringVar(tk)
+description.set("None selected")
 
 # Updates the shot chart
 def update_chart():
@@ -207,12 +226,16 @@ def update_chart():
     
 
 # Team Select
-team_menu = OptionMenu(tk, variable, home_team, away_team, "Both")
+team_menu = OptionMenu(tk, variable, "Both", home_team, away_team)
 team_menu.pack()
 
 # Buttons
 # - Update
 update = Button(tk, text="Update", command=update_chart)
 update.pack()
+
+# Description
+desc = Label(tk, textvariable=description)
+desc.pack()
 
 tk.mainloop()
