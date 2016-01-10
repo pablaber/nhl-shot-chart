@@ -11,6 +11,7 @@ RED = "#ED1B25"
 BLUE = "#3F47CC"
 LIGHT_BLUE = "#9AD9EA"
 GRAY = "#CCCCCC"
+BLACK = "#000000"
 
 events = []
 
@@ -19,7 +20,7 @@ def create_rink():
 
     # RINK
     coords = OFFSET, OFFSET, OFFSET+22*SCALE, OFFSET+22*SCALE
-    canvas.create_arc(coords, start=90, extent=90, fill=WHITE, outline=WHITE)
+    canvas.create_arc(coords, start=90, extent=90, fill=WHITE, outline="")   
     coords = OFFSET, HEIGHT-OFFSET-22*SCALE, OFFSET+22*SCALE, HEIGHT-OFFSET
     canvas.create_arc(coords, start=180, extent=90, fill=WHITE, outline=WHITE)
     coords = WIDTH-OFFSET-22*SCALE, HEIGHT-OFFSET-22*SCALE, WIDTH-OFFSET, HEIGHT-OFFSET
@@ -93,6 +94,25 @@ def create_rink():
     canvas.create_line(coords, fill=RED, width=7)
     coords = WIDTH/2, OFFSET, WIDTH/2, HEIGHT-OFFSET
     canvas.create_line(coords, fill=WHITE, width=5, dash=(9,9))
+
+    # RINK OUTLINE
+    coords = OFFSET, OFFSET, OFFSET+22*SCALE, OFFSET+22*SCALE
+    canvas.create_arc(coords, start=90, extent=90, outline=BLACK, style=ARC, width=2)
+    coords = OFFSET, HEIGHT-OFFSET-22*SCALE, OFFSET+22*SCALE, HEIGHT-OFFSET
+    canvas.create_arc(coords, start=180, extent=90, outline=BLACK, style=ARC, width=2)
+    coords = WIDTH-OFFSET-22*SCALE, HEIGHT-OFFSET-22*SCALE, WIDTH-OFFSET, HEIGHT-OFFSET
+    canvas.create_arc(coords, start=270, extent=90, outline=BLACK, style=ARC, width=2)
+    coords = WIDTH-OFFSET-22*SCALE, OFFSET, WIDTH-OFFSET, OFFSET+22*SCALE
+    canvas.create_arc(coords, start=0, extent=90, outline=BLACK, style=ARC, width=2)
+    coords = OFFSET+11*SCALE, OFFSET, WIDTH-OFFSET-11*SCALE, OFFSET
+    canvas.create_line(coords, fill=BLACK, width=2)
+    coords = WIDTH-OFFSET, OFFSET+11*SCALE, WIDTH-OFFSET, HEIGHT-OFFSET-11*SCALE
+    canvas.create_line(coords, fill=BLACK, width=2)
+    coords = WIDTH-OFFSET-11*SCALE, HEIGHT-OFFSET, OFFSET+11*SCALE, HEIGHT-OFFSET
+    canvas.create_line(coords, fill=BLACK, width=2)
+    coords = OFFSET, OFFSET+11*SCALE, OFFSET, HEIGHT-OFFSET-11*SCALE
+    canvas.create_line(coords, fill=BLACK, width=2)
+    
 
     # CENTER DOT
     coords = WIDTH/2-1*SCALE-1, HEIGHT/2-1*SCALE-1, WIDTH/2+1*SCALE+1, HEIGHT/2+1*SCALE+1
@@ -207,20 +227,23 @@ def determine_periods(obj):
 
 tk = Tk()
 tk.geometry(str(WIDTH)+"x"+str(HEIGHT+150))
+tk.resizable(width=FALSE, height=FALSE)
 tk.title("NHL Shot Chart")
 
+title_frame = Frame(tk)
+title_frame.grid(row=0)
 top_frame = Frame(tk)
-top_frame.grid(row=0)
+top_frame.grid(row=1)
 bottom_frame = Frame(tk)
-bottom_frame.grid(row=2)
+bottom_frame.grid(row=3)
 description_frame = Frame(tk)
-description_frame.grid(row=1)
+description_frame.grid(row=2)
 
-
-canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
+canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH)
 create_rink()
 
-data = get_pbp_json(20152016, 2015020590)
+data = get_pbp_json(20152016, 2015020614)
+# data = get_pbp_json(20152016, 2015020590)
 # data = get_pbp_json(20152016, 2015020613)
 plays = data["data"]["game"]["plays"]["play"]
 home_team = data["data"]["game"]["hometeamname"]
@@ -241,6 +264,8 @@ def update_chart():
     selected_period = period_variable.get()
     if selected_period == "All":
         selected_period = -1
+    elif selected_period == "OT":
+        selected_period = 4
     selected_id = -1
     if selected_team == home_team:
         selected_id = data["data"]["game"]["hometeamid"]
@@ -250,6 +275,11 @@ def update_chart():
     for i in range(0, len(plays)):
         add_to_chart(plays[i], {"teamid":selected_id, "period":selected_period})
     
+# Title
+title_text = away_team + " at " + home_team
+title_font = ("TkDefaultFont", 16, "bold")
+title = Label(title_frame, text=title_text, font=title_font)
+title.grid(row=0)
 
 # Team Select
 team_label = Label(bottom_frame, text="Select Team")
