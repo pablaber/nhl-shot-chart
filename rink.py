@@ -1,13 +1,14 @@
 from Tkinter import *
 import urllib, json
 
-tk = Tk()
-tk.title("NHL Shot Chart")
-
 SCALE = 4;
 OFFSET = 20;
 HEIGHT = 85 * SCALE + OFFSET * 2
 WIDTH = 200 * SCALE + OFFSET * 2
+
+tk = Tk()
+tk.geometry(str(WIDTH)+"x"+str(HEIGHT + 100))
+tk.title("NHL Shot Chart")
 
 # COLORS
 WHITE = "#FFFFFF"
@@ -15,6 +16,8 @@ RED = "#ED1B25"
 BLUE = "#3F47CC"
 LIGHT_BLUE = "#9AD9EA"
 GRAY = "#CCCCCC"
+
+events = []
 
 def create_rink(canvas):
 
@@ -147,7 +150,7 @@ def get_pbp_json(season, game_id):
 
 # Adds play to the shot chart
 # Types of plays: Goal, Shot, Hit, Penalty
-def add_to_chart(play, canvas):
+def add_to_chart(play, options={}):
     x = play["xcoord"]
     y = play["ycoord"]
     coords = WIDTH/2+x*SCALE-4, HEIGHT/2+y*SCALE-4, WIDTH/2+x*SCALE+4, HEIGHT/2+y*SCALE+4
@@ -160,16 +163,56 @@ def add_to_chart(play, canvas):
         color = "green"
     elif play["type"] == "Penalty":
         color = "blue"
-    canvas.create_oval(coords, outline="", fill=color)
-    canvas.pack()
+    if options == {}:
+        event = canvas.create_oval(coords, outline="", fill=color)
+        events.append(event)
+        canvas.pack()
+    else:
+        if play["teamid"] == options["teamid"]:
+            event = canvas.create_oval(coords, outline="", fill=color)
+            events.append(event)
+            canvas.pack()
+
+def clear_events():
+    while len(events) > 0:
+        canvas.delete(events.pop())
 
 canvas = Canvas(tk, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
 create_rink(canvas)
 
 data = get_pbp_json(20152016, 2015020590)
 plays = data["data"]["game"]["plays"]["play"]
+home_team = data["data"]["game"]["hometeamname"]
+away_team = data["data"]["game"]["awayteamname"]
+
+
 
 for i in range(0, len(plays)):
-    add_to_chart(plays[i], canvas)
+    add_to_chart(plays[i])
+
+variable = StringVar(tk)
+variable.set("Select Team") # default value
+
+# Updates the shot chart
+def update_chart():
+    selected_team = variable.get()
+    selected_id = -1
+    if selected_team == home_team:
+        selected_id = data["data"]["game"]["hometeamid"]
+    elif selected_team == away_team:
+        selected_id = data["data"]["game"]["awayteamid"]
+    clear_events()
+    for i in range(0, len(plays)):
+        add_to_chart(plays[i], {"teamid":selected_id})
+    
+
+# Team Select
+team_menu = OptionMenu(tk, variable, home_team, away_team, "Both")
+team_menu.pack()
+
+# Buttons
+# - Update
+update = Button(tk, text="Update", command=update_chart)
+update.pack()
 
 tk.mainloop()
