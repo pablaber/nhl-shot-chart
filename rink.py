@@ -1,16 +1,11 @@
 from Tkinter import *
 import urllib, json
 
+# CONSTANTS
 SCALE = 4;
 OFFSET = 20;
 HEIGHT = 85 * SCALE + OFFSET * 2
 WIDTH = 200 * SCALE + OFFSET * 2
-
-tk = Tk()
-tk.geometry(str(WIDTH)+"x"+str(HEIGHT + 100))
-tk.title("NHL Shot Chart")
-
-# COLORS
 WHITE = "#FFFFFF"
 RED = "#ED1B25"
 BLUE = "#3F47CC"
@@ -19,7 +14,8 @@ GRAY = "#CCCCCC"
 
 events = []
 
-def create_rink(canvas):
+def create_rink():
+    """Creates a blank hockey rink."""
 
     # RINK
     coords = OFFSET, OFFSET, OFFSET+22*SCALE, OFFSET+22*SCALE
@@ -143,26 +139,39 @@ def create_rink(canvas):
 
 # Returns the PlayByPlay.json file for the game given by the season and game_id
 def get_pbp_json(season, game_id):
+    """Returns the PlayByPlay.json fil for the game given by the season and game_id."""
     url = "http://live.nhl.com/GameData/" + str(season) + "/" + str(game_id) + "/PlayByPlay.json"
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     return data
 
 def click_event(event):
+    """The event handler that sets the description when an event is clicked."""
     desc_tuple = canvas.gettags(event.widget.find_closest(event.x, event.y)[0])
     desc = [x for x in desc_tuple if x != "current"]
     desc = ' '.join(map(str,desc))
     description.set(desc)
 
+def add_event(play, color, label, x, y):
+    """Adds a single event to the canvas."""
+    coords = WIDTH/2+x*SCALE-6, HEIGHT/2+y*SCALE-6, WIDTH/2+x*SCALE+6, HEIGHT/2+y*SCALE+6
+    style = ("Arial", 10, "bold")
+    event = canvas.create_oval(coords, outline="black", fill=color, tags=play["desc"])
+    events.append(event)
+    canvas.tag_bind(event, "<ButtonPress-1>", click_event)
+    event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=play["desc"])
+    events.append(event)
+    canvas.tag_bind(event, "<ButtonPress-1>", click_event)
+    canvas.pack()
+    
 # Adds play to the shot chart
 # Types of plays: Goal, Shot, Hit, Penalty
 def add_to_chart(play, options={}):
+    """Add's an event to the chart by setting colors and labels then calling add_event."""
     x = play["xcoord"]
     y = play["ycoord"]
-    coords = WIDTH/2+x*SCALE-6, HEIGHT/2+y*SCALE-6, WIDTH/2+x*SCALE+6, HEIGHT/2+y*SCALE+6
     color = LIGHT_BLUE
     label = ""
-    style = ("Arial", 10, "bold")
     if play["type"] == "Shot":
         color = "red"
         label = "S"
@@ -176,26 +185,22 @@ def add_to_chart(play, options={}):
         color = "blue"
         label = "P"
     if options == {}:
-        event = canvas.create_oval(coords, outline="black", fill=color)
-        events.append(event)
-        event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style)
-        events.append(event)
-        canvas.pack()
+        add_event(play, color, label, x, y)
     else:
         if play["teamid"] == options["teamid"]:
-            event = canvas.create_oval(coords, outline="black", fill=color)
-            events.append(event)
-            event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=play["desc"])
-            canvas.tag_bind(event, "<ButtonPress-1>", click_event)
-            events.append(event)
-            canvas.pack()
+            add_event(play, color, label, x, y)
 
 def clear_events():
+    """Clears all events off of the canvas."""
     while len(events) > 0:
         canvas.delete(events.pop())
 
+tk = Tk()
+tk.geometry(str(WIDTH)+"x"+str(HEIGHT + 100))
+tk.title("NHL Shot Chart")
+
 canvas = Canvas(tk, height=HEIGHT, width=WIDTH, bg="#AAAAAA")
-create_rink(canvas)
+create_rink()
 
 data = get_pbp_json(20152016, 2015020590)
 plays = data["data"]["game"]["plays"]["play"]
@@ -214,6 +219,7 @@ description.set("None selected")
 
 # Updates the shot chart
 def update_chart():
+    """Updates the shot chart based off of what team is selected."""
     selected_team = variable.get()
     selected_id = -1
     if selected_team == home_team:
