@@ -1,4 +1,5 @@
 from Tkinter import *
+from PIL import Image, ImageTk
 import urllib, json
 
 # CONSTANTS
@@ -226,7 +227,7 @@ def determine_periods(obj):
     
 
 tk = Tk()
-tk.geometry(str(WIDTH)+"x"+str(HEIGHT+150))
+tk.geometry(str(WIDTH)+"x"+str(HEIGHT+200))
 tk.resizable(width=FALSE, height=FALSE)
 tk.title("NHL Shot Chart")
 
@@ -277,9 +278,20 @@ def update_chart():
     
 # Title
 title_text = away_team + " at " + home_team
-title_font = ("TkDefaultFont", 16, "bold")
+title_font = ("TkDefaultFont", 24, "bold")
 title = Label(title_frame, text=title_text, font=title_font)
-title.grid(row=0)
+title.grid(row=0, column=1)
+awayteam_filename = "logos/gif_40/" + str(data["data"]["game"]["awayteamid"]) + ".gif"
+hometeam_filename = "logos/gif_40/" + str(data["data"]["game"]["hometeamid"]) + ".gif"
+awayteam_logo = PhotoImage(file=awayteam_filename)
+awayteam_label = Label(title_frame, image=awayteam_logo)
+awayteam_label.photo = awayteam_logo
+awayteam_label.grid(row=0, column=0)
+hometeam_logo = PhotoImage(file=hometeam_filename)
+hometeam_label = Label(title_frame, image=hometeam_logo)
+hometeam_label.photo = hometeam_logo
+hometeam_label.grid(row=0, column=2)
+
 
 # Team Select
 team_label = Label(bottom_frame, text="Select Team")
