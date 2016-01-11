@@ -35,7 +35,11 @@ def create_rink():
 
     # CENTER CIRCLE
     coords = WIDTH/2-15*SCALE, HEIGHT/2-15*SCALE, WIDTH/2+15*SCALE, HEIGHT/2+15*SCALE
-    canvas.create_oval(coords, outline=BLUE, width=1.5, fill=WHITE)
+    canvas.create_oval(coords, outline=BLUE, width=2, fill=WHITE)
+
+    # HALF CENTER CIRCLE
+    coords = WIDTH/2-10*SCALE, HEIGHT-OFFSET-10*SCALE, WIDTH/2+10*SCALE, HEIGHT-OFFSET+10*SCALE
+    canvas.create_arc(coords, outline=RED, width=2, start=0, extent=180)
 
     # GOAL AREA
     # - Left
@@ -235,6 +239,7 @@ def click_event(event):
 
 def add_event(play, color, label, x, y):
     """Adds a single event to the canvas."""
+    x = x*-1
     coords = WIDTH/2+x*SCALE-6, HEIGHT/2+y*SCALE-6, WIDTH/2+x*SCALE+6, HEIGHT/2+y*SCALE+6
     style = ("Arial", 10, "bold")
     event = canvas.create_oval(coords, outline="black", fill=color, tags=play["desc"])
