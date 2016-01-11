@@ -21,7 +21,7 @@ def create_rink():
 
     # RINK
     coords = OFFSET, OFFSET, OFFSET+22*SCALE, OFFSET+22*SCALE
-    canvas.create_arc(coords, start=90, extent=90, fill=WHITE, outline="")   
+    canvas.create_arc(coords, start=90, extent=90, fill=WHITE, outline="")
     coords = OFFSET, HEIGHT-OFFSET-22*SCALE, OFFSET+22*SCALE, HEIGHT-OFFSET
     canvas.create_arc(coords, start=180, extent=90, fill=WHITE, outline=WHITE)
     coords = WIDTH-OFFSET-22*SCALE, HEIGHT-OFFSET-22*SCALE, WIDTH-OFFSET, HEIGHT-OFFSET
@@ -113,7 +113,7 @@ def create_rink():
     canvas.create_line(coords, fill=BLACK, width=2)
     coords = OFFSET, OFFSET+11*SCALE, OFFSET, HEIGHT-OFFSET-11*SCALE
     canvas.create_line(coords, fill=BLACK, width=2)
-    
+
 
     # CENTER DOT
     coords = WIDTH/2-1*SCALE-1, HEIGHT/2-1*SCALE-1, WIDTH/2+1*SCALE+1, HEIGHT/2+1*SCALE+1
@@ -125,21 +125,57 @@ def create_rink():
     canvas.create_oval(coords, outline=RED, width=1.5)
     coords = OFFSET+30*SCALE, HEIGHT/2-23*SCALE, OFFSET+32*SCALE, HEIGHT/2-21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
+    # - - Cross
+    coords = OFFSET+25*SCALE, HEIGHT/2-22.8*SCALE, OFFSET+29*SCALE, HEIGHT/2-22.8*SCALE, OFFSET+29*SCALE, HEIGHT/2-25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+25*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+29*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+29*SCALE, HEIGHT/2-18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+37*SCALE, HEIGHT/2-22.8*SCALE, OFFSET+33*SCALE, HEIGHT/2-22.8*SCALE, OFFSET+33*SCALE, HEIGHT/2-25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+37*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2-18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
     # - Bottom Left
     coords = OFFSET+16*SCALE, HEIGHT/2+37*SCALE, OFFSET+46*SCALE, HEIGHT/2+7*SCALE
     canvas.create_oval(coords, outline=RED, width=1.5)
     coords = OFFSET+30*SCALE, HEIGHT/2+23*SCALE, OFFSET+32*SCALE, HEIGHT/2+21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
+    # - - Cross
+    coords = OFFSET+25*SCALE, HEIGHT/2+22.8*SCALE, OFFSET+29*SCALE, HEIGHT/2+22.8*SCALE, OFFSET+29*SCALE, HEIGHT/2+25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+25*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+29*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+29*SCALE, HEIGHT/2+18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+37*SCALE, HEIGHT/2+22.8*SCALE, OFFSET+33*SCALE, HEIGHT/2+22.8*SCALE, OFFSET+33*SCALE, HEIGHT/2+25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+37*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2+18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
     # - Top Right
     coords = WIDTH-(OFFSET+16*SCALE), HEIGHT/2-37*SCALE, WIDTH-(OFFSET+46*SCALE), HEIGHT/2-7*SCALE
     canvas.create_oval(coords, outline=RED, width=1.5)
     coords = WIDTH-(OFFSET+30*SCALE), HEIGHT/2-23*SCALE, WIDTH-(OFFSET+32*SCALE), HEIGHT/2-21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
+    # - - Cross
+    coords = WIDTH-(OFFSET+25*SCALE), HEIGHT/2-22.8*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2-22.8*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2-25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+25*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2-18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+37*SCALE), HEIGHT/2-22.8*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-22.8*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+37*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
     # - Bottom Right
     coords = WIDTH-(OFFSET+16*SCALE), HEIGHT/2+37*SCALE, WIDTH-(OFFSET+46*SCALE), HEIGHT/2+7*SCALE
     canvas.create_oval(coords, outline=RED, width=1.5)
     coords = WIDTH-(OFFSET+30*SCALE), HEIGHT/2+23*SCALE, WIDTH-(OFFSET+32*SCALE), HEIGHT/2+21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
+    # - - Cross
+    coords = WIDTH-(OFFSET+25*SCALE), HEIGHT/2+22.8*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2+22.8*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2+25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+25*SCALE), HEIGHT/2+21.2*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2+21.2*SCALE, WIDTH-(OFFSET+29*SCALE), HEIGHT/2+18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+37*SCALE), HEIGHT/2+22.8*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2+22.8*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2+25.8*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+37*SCALE), HEIGHT/2+21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2+21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2+18.2*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
 
     # NEUTRAL ZONE FACEOFF
     # - Top Left
@@ -184,37 +220,38 @@ def add_event(play, color, label, x, y):
     events.append(event)
     canvas.tag_bind(event, "<ButtonPress-1>", click_event)
     canvas.pack()
-    
+
 # Adds play to the shot chart
 # Types of plays: Goal, Shot, Hit, Penalty
 def add_to_chart(play, options={}):
     """Add's an event to the chart by setting colors and labels then calling add_event."""
-    x = play["xcoord"]
-    y = play["ycoord"]
-    color = LIGHT_BLUE
-    label = ""
-    if play["type"] == "Shot":
-        color = "red"
-        label = "S"
-    elif play["type"] == "Hit":
-        color = "yellow"
-        label = "H"
-    elif play["type"] == "Goal":
-        color = "green"
-        label = "G"
-    elif play["type"] == "Penalty":
-        color = "blue"
-        label = "P"
-    if options == {}:
-        add_event(play, color, label, x, y)
-    else:
-        adding = True
-        for option in options:
-            if str(play[option]) != str(options[option]) and options[option] != -1:
-                adding = False
-                break
-        if adding:  
+    if str(play["period"]) != "5":
+        x = play["xcoord"]
+        y = play["ycoord"]
+        color = LIGHT_BLUE
+        label = ""
+        if play["type"] == "Shot":
+            color = "red"
+            label = "S"
+        elif play["type"] == "Hit":
+            color = "yellow"
+            label = "H"
+        elif play["type"] == "Goal":
+            color = "green"
+            label = "G"
+        elif play["type"] == "Penalty":
+            color = "blue"
+            label = "P"
+        if options == {}:
             add_event(play, color, label, x, y)
+        else:
+            adding = True
+            for option in options:
+                if str(play[option]) != str(options[option]) and options[option] != -1:
+                    adding = False
+                    break
+            if adding:
+                add_event(play, color, label, x, y)
 
 def clear_events():
     """Clears all events off of the canvas."""
@@ -224,7 +261,7 @@ def clear_events():
 def determine_periods(obj):
     """Returns the number of periods in the json 'play' array obj"""
     return obj[len(obj)-1]["period"]
-    
+
 
 tk = Tk()
 tk.geometry(str(WIDTH)+"x"+str(HEIGHT+200))
@@ -275,7 +312,7 @@ def update_chart():
     clear_events()
     for i in range(0, len(plays)):
         add_to_chart(plays[i], {"teamid":selected_id, "period":selected_period})
-    
+
 # Title
 title_text = away_team + " at " + home_team
 title_font = ("TkDefaultFont", 24, "bold")
