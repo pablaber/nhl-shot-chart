@@ -289,9 +289,29 @@ def determine_periods(obj):
     """Returns the number of periods in the json 'play' array obj"""
     return obj[len(obj)-1]["period"]
 
+def get_games(season, date):
+    """ Returns an array of objects representing the games"""
+    url = "http://live.nhl.com/GameData/SeasonSchedule-" + season + ".json"
+    response = urllib.urlopen(url)
+    data = json.loads(response.read())
+    games = []
+    for game in data:
+        if game["est"][:8] == date:
+            games.append(game)
+    return games
+
+def get_game_strings(games):
+    """Takes what is returned from get_games and produces an array of strings to display"""
+    game_strings = []
+    for game in games:
+        game_string = game["a"] + " at " + game["h"] + " "
+        date = game["est"][4:6] + "/" + game["est"][6:8] + "/" + game["est"][:4] + " " + game["est"][9:]
+        game_string = game_string + date
+        game_strings.append(game_string)
+    return game_strings
 
 tk = Tk()
-tk.geometry(str(WIDTH)+"x"+str(HEIGHT+200))
+tk.geometry(str(WIDTH+200)+"x"+str(HEIGHT+200))
 tk.resizable(width=FALSE, height=FALSE)
 tk.title("NHL Shot Chart")
 
@@ -299,10 +319,12 @@ title_frame = Frame(tk)
 title_frame.grid(row=0)
 top_frame = Frame(tk)
 top_frame.grid(row=1)
-bottom_frame = Frame(tk)
-bottom_frame.grid(row=3)
 description_frame = Frame(tk)
 description_frame.grid(row=2)
+bottom_frame = Frame(tk)
+bottom_frame.grid(row=3)
+side_frame = Frame(tk)
+side_frame.grid(row=0, column=1, rowspan=4)
 
 
 canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH)
@@ -385,5 +407,10 @@ update.grid(row=3, column=1)
 # Description
 desc = Label(description_frame, textvariable=description)
 desc.grid(row=0, sticky=E+W+N+S)
+
+# Game Info
+game_select_label = Label(side_frame, text="Select Game")
+game_select_label.grid(row=0)
+
 
 tk.mainloop()
