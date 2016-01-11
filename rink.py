@@ -121,8 +121,14 @@ def create_rink():
 
     # FACEOFF
     # - Top Left
+    # - - Ticks
+    coords = OFFSET+29.5*SCALE, HEIGHT/2-39*SCALE, OFFSET+29.5*SCALE, HEIGHT/2-5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+32.5*SCALE, HEIGHT/2-39*SCALE, OFFSET+32.5*SCALE, HEIGHT/2-5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    # - - Circles
     coords = OFFSET+16*SCALE, HEIGHT/2-37*SCALE, OFFSET+46*SCALE, HEIGHT/2-7*SCALE
-    canvas.create_oval(coords, outline=RED, width=1.5)
+    canvas.create_oval(coords, outline=RED, width=2, fill=WHITE)
     coords = OFFSET+30*SCALE, HEIGHT/2-23*SCALE, OFFSET+32*SCALE, HEIGHT/2-21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
     # - - Cross
@@ -135,8 +141,14 @@ def create_rink():
     coords = OFFSET+37*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2-21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2-18.2*SCALE
     canvas.create_line(coords, fill=RED, width=2)
     # - Bottom Left
+    # - - Ticks
+    coords = OFFSET+29.5*SCALE, HEIGHT/2+39*SCALE, OFFSET+29.5*SCALE, HEIGHT/2+5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = OFFSET+32.5*SCALE, HEIGHT/2+39*SCALE, OFFSET+32.5*SCALE, HEIGHT/2+5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    # - - Circles
     coords = OFFSET+16*SCALE, HEIGHT/2+37*SCALE, OFFSET+46*SCALE, HEIGHT/2+7*SCALE
-    canvas.create_oval(coords, outline=RED, width=1.5)
+    canvas.create_oval(coords, outline=RED, width=2, fill=WHITE)
     coords = OFFSET+30*SCALE, HEIGHT/2+23*SCALE, OFFSET+32*SCALE, HEIGHT/2+21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
     # - - Cross
@@ -149,8 +161,14 @@ def create_rink():
     coords = OFFSET+37*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2+21.2*SCALE, OFFSET+33*SCALE, HEIGHT/2+18.2*SCALE
     canvas.create_line(coords, fill=RED, width=2)
     # - Top Right
+    # - - Ticks
+    coords = WIDTH-(OFFSET+29.5*SCALE), HEIGHT/2-39*SCALE, WIDTH-(OFFSET+29.5*SCALE), HEIGHT/2-5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+32.5*SCALE), HEIGHT/2-39*SCALE, WIDTH-(OFFSET+32.5*SCALE), HEIGHT/2-5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    # - - Circles
     coords = WIDTH-(OFFSET+16*SCALE), HEIGHT/2-37*SCALE, WIDTH-(OFFSET+46*SCALE), HEIGHT/2-7*SCALE
-    canvas.create_oval(coords, outline=RED, width=1.5)
+    canvas.create_oval(coords, outline=RED, width=2, fill=WHITE)
     coords = WIDTH-(OFFSET+30*SCALE), HEIGHT/2-23*SCALE, WIDTH-(OFFSET+32*SCALE), HEIGHT/2-21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
     # - - Cross
@@ -163,8 +181,14 @@ def create_rink():
     coords = WIDTH-(OFFSET+37*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-21.2*SCALE, WIDTH-(OFFSET+33*SCALE), HEIGHT/2-18.2*SCALE
     canvas.create_line(coords, fill=RED, width=2)
     # - Bottom Right
+    # - - Ticks
+    coords = WIDTH-(OFFSET+29.5*SCALE), HEIGHT/2+39*SCALE, WIDTH-(OFFSET+29.5*SCALE), HEIGHT/2+5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    coords = WIDTH-(OFFSET+32.5*SCALE), HEIGHT/2+39*SCALE, WIDTH-(OFFSET+32.5*SCALE), HEIGHT/2+5*SCALE
+    canvas.create_line(coords, fill=RED, width=2)
+    # - - Circles
     coords = WIDTH-(OFFSET+16*SCALE), HEIGHT/2+37*SCALE, WIDTH-(OFFSET+46*SCALE), HEIGHT/2+7*SCALE
-    canvas.create_oval(coords, outline=RED, width=1.5)
+    canvas.create_oval(coords, outline=RED, width=2, fill=WHITE)
     coords = WIDTH-(OFFSET+30*SCALE), HEIGHT/2+23*SCALE, WIDTH-(OFFSET+32*SCALE), HEIGHT/2+21*SCALE
     canvas.create_oval(coords, fill=RED, outline="")
     # - - Cross
