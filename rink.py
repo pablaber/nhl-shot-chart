@@ -222,7 +222,6 @@ def create_rink():
 
     canvas.pack()
 
-# Returns the PlayByPlay.json file for the game given by the season and game_id
 def get_pbp_json(season, game_id):
     """Returns the PlayByPlay.json fil for the game given by the season and game_id."""
     url = "http://live.nhl.com/GameData/" + str(season) + "/" + str(game_id) + "/PlayByPlay.json"
@@ -242,16 +241,15 @@ def add_event(play, color, label, x, y):
     x = x*-1
     coords = WIDTH/2+x*SCALE-6, HEIGHT/2+y*SCALE-6, WIDTH/2+x*SCALE+6, HEIGHT/2+y*SCALE+6
     style = ("Arial", 10, "bold")
-    event = canvas.create_oval(coords, outline="black", fill=color, tags=play["desc"])
+    tag = play["desc"] + ". Period: " + str(play["period"]) + ". Time: " + str(play["time"])
+    event = canvas.create_oval(coords, outline="black", fill=color, tags=tag)
     events.append(event)
     canvas.tag_bind(event, "<ButtonPress-1>", click_event)
-    event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=play["desc"])
+    event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=tag)
     events.append(event)
     canvas.tag_bind(event, "<ButtonPress-1>", click_event)
     canvas.pack()
 
-# Adds play to the shot chart
-# Types of plays: Goal, Shot, Hit, Penalty
 def add_to_chart(play, options={}):
     """Add's an event to the chart by setting colors and labels then calling add_event."""
     if str(play["period"]) != "5":
@@ -306,6 +304,7 @@ bottom_frame.grid(row=3)
 description_frame = Frame(tk)
 description_frame.grid(row=2)
 
+
 canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH)
 create_rink()
 
@@ -316,13 +315,14 @@ plays = data["data"]["game"]["plays"]["play"]
 home_team = data["data"]["game"]["hometeamname"]
 away_team = data["data"]["game"]["awayteamname"]
 
+# Add all plays to chart on startup
 for i in range(0, len(plays)):
     add_to_chart(plays[i])
 
 variable = StringVar(bottom_frame)
 variable.set("Both") # default value
 description = StringVar(bottom_frame)
-description.set("None selected")
+description.set("Click an event to see information.")
 
 # Updates the shot chart
 def update_chart():
@@ -373,10 +373,8 @@ period_variable = StringVar(bottom_frame)
 period_variable.set("All")
 periods = determine_periods(plays)
 period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3")
-if periods == 4:
+if periods == 4 or periods == 5:
     period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3", "OT")
-elif periods == 5:
-    period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3", "OT", "SO")
 period_menu.grid(row=1, column = 1, columnspan=2, sticky=E+W)
 
 # Buttons
