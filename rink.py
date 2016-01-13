@@ -220,7 +220,7 @@ def create_rink():
     canvas.create_oval(coords, outline="", fill=RED)
 
 
-    canvas.pack()
+    canvas.grid(row=1, columnspan=5)
 
 def get_pbp_json(season, game_id):
     """Returns the PlayByPlay.json fil for the game given by the season and game_id."""
@@ -248,7 +248,7 @@ def add_event(play, color, label, x, y):
     event = canvas.create_text(WIDTH/2+x*SCALE, HEIGHT/2+y*SCALE, text=label, font=style, tags=tag)
     events.append(event)
     canvas.tag_bind(event, "<ButtonPress-1>", click_event)
-    canvas.pack()
+    canvas.grid(row=1, columnspan=5)
 
 def add_to_chart(play, options={}):
     """Add's an event to the chart by setting colors and labels then calling add_event."""
@@ -315,19 +315,10 @@ tk.geometry(str(WIDTH+200)+"x"+str(HEIGHT+200))
 tk.resizable(width=FALSE, height=FALSE)
 tk.title("NHL Shot Chart")
 
-title_frame = Frame(tk)
-title_frame.grid(row=0)
-top_frame = Frame(tk)
-top_frame.grid(row=1)
-description_frame = Frame(tk)
-description_frame.grid(row=2)
-bottom_frame = Frame(tk)
-bottom_frame.grid(row=3)
-side_frame = Frame(tk)
-side_frame.grid(row=0, column=1, rowspan=4)
+main_frame = Frame(tk)
+main_frame.grid()
 
-
-canvas = Canvas(top_frame, height=HEIGHT, width=WIDTH)
+canvas = Canvas(main_frame, height=HEIGHT, width=WIDTH)
 create_rink()
 
 data = get_pbp_json(20152016, 2015020614)
@@ -341,9 +332,9 @@ away_team = data["data"]["game"]["awayteamname"]
 for i in range(0, len(plays)):
     add_to_chart(plays[i])
 
-variable = StringVar(bottom_frame)
+variable = StringVar(main_frame)
 variable.set("Both") # default value
-description = StringVar(bottom_frame)
+description = StringVar(main_frame)
 description.set("Click an event to see information.")
 
 # Updates the shot chart
@@ -367,50 +358,50 @@ def update_chart():
 # Title
 title_text = away_team + " at " + home_team
 title_font = ("TkDefaultFont", 24, "bold")
-title = Label(title_frame, text=title_text, font=title_font)
-title.grid(row=0, column=1)
+title = Label(main_frame, text=title_text, font=title_font)
+title.grid(row=0, column=1, columnspan=3, sticky=E+W)
 awayteam_filename = "logos/gif_40/" + str(data["data"]["game"]["awayteamid"]) + ".gif"
 hometeam_filename = "logos/gif_40/" + str(data["data"]["game"]["hometeamid"]) + ".gif"
 awayteam_logo = PhotoImage(file=awayteam_filename)
-awayteam_label = Label(title_frame, image=awayteam_logo)
+awayteam_label = Label(main_frame, image=awayteam_logo)
 awayteam_label.photo = awayteam_logo
-awayteam_label.grid(row=0, column=0)
+awayteam_label.grid(row=0, column=0, sticky="E")
 hometeam_logo = PhotoImage(file=hometeam_filename)
-hometeam_label = Label(title_frame, image=hometeam_logo)
+hometeam_label = Label(main_frame, image=hometeam_logo)
 hometeam_label.photo = hometeam_logo
-hometeam_label.grid(row=0, column=2)
+hometeam_label.grid(row=0, column=4, sticky="W")
 
 
 # Team Select
-team_label = Label(bottom_frame, text="Select Team")
-team_label.grid(row=0, sticky=E)
-team_menu = OptionMenu(bottom_frame, variable, "Both", home_team, away_team)
+team_label = Label(main_frame, text="Select Team")
+team_label.grid(row=3, column=1, sticky=E)
+team_menu = OptionMenu(main_frame, variable, "Both", home_team, away_team)
 team_menu.config(width=20)
-team_menu.grid(row=0, column=1, columnspan=2, sticky=E+W)
+team_menu.grid(row=3, column=2, columnspan=2, sticky=W, ipadx=10)
 
 # Period Select
-period_label = Label(bottom_frame, text="Select Period")
-period_label.grid(row=1, sticky=E)
-period_variable = StringVar(bottom_frame)
+period_label = Label(main_frame, text="Select Period")
+period_label.grid(row=4, column=1, sticky=E)
+period_variable = StringVar(main_frame)
 period_variable.set("All")
 periods = determine_periods(plays)
-period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3")
+period_menu = OptionMenu(main_frame, period_variable, "All", "1", "2", "3")
 if periods == 4 or periods == 5:
-    period_menu = OptionMenu(bottom_frame, period_variable, "All", "1", "2", "3", "OT")
-period_menu.grid(row=1, column = 1, columnspan=2, sticky=E+W)
+    period_menu = OptionMenu(main_frame, period_variable, "All", "1", "2", "3", "OT")
+period_menu.grid(row=4, column = 2, columnspan=2, sticky=W, ipadx=68)
 
 # Buttons
 # - Update
-update = Button(bottom_frame, text="Update", command=update_chart)
-update.grid(row=3, column=1)
+update = Button(main_frame, text="Update", command=update_chart)
+update.grid(row=5, column=2, sticky=W, padx=40)
 
 # Description
-desc = Label(description_frame, textvariable=description)
-desc.grid(row=0, sticky=E+W+N+S)
+desc = Label(main_frame, textvariable=description)
+desc.grid(row=2, columnspan=5, sticky=E+W+N+S)
 
 # Game Info
-game_select_label = Label(side_frame, text="Select Game")
-game_select_label.grid(row=0)
+# game_select_label = Label(side_frame, text="Game Select")
+# game_select_label.pack(fill=X)
 
 
 tk.mainloop()
